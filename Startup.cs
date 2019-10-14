@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventrys.Src.Data;
+using Eventrys.Src.Domain.Validators;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,8 +31,10 @@ namespace Eventrys
             services.AddMvc (options =>
                 {
                     options.EnableEndpointRouting = false;
+                    options.Filters.Add<ValidationFilter> ();
                 })
-                .SetCompatibilityVersion (CompatibilityVersion.Version_3_0);
+                .SetCompatibilityVersion (CompatibilityVersion.Version_3_0)
+                .AddFluentValidation (config => config.RegisterValidatorsFromAssemblyContaining<Startup> ());;
 
             services.AddControllers()
                 .AddNewtonsoftJson();
