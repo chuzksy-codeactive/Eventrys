@@ -12,7 +12,6 @@ namespace Eventrys.Src.Services.Interfaces
         Task<User> GetById (int id);
         Task<User> UpdateById (int id);
         Task<User> DeleteById (int id);
-
-        Task<User> CreateUser (User user);
+        Task<User> Create (User user);
     }
 }

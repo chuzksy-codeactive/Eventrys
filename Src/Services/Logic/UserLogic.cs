@@ -21,7 +21,7 @@ namespace Eventrys.Src.Services.Logic
             throw new System.NotImplementedException ();
         }
 
-        public async Task<User> CreateUser (User user)
+        public async Task<User> Create (User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword (user.Password);
 
@@ -52,7 +52,7 @@ namespace Eventrys.Src.Services.Logic
                 return null;
             }
 
-            return _context.Users;
+            return users;
         }
 
         public async Task<User> GetById (int id)
