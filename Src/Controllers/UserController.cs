@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eventrys.Src.Domain.Entities;
+using Eventrys.Src.Domain.Exceptions;
 using Eventrys.Src.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -42,9 +42,20 @@ namespace Eventrys.Src.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser (User u)
         {
-            var user = await _user.Create (u);
+            try
+            {
+                var user = await _user.Create (u);
 
-            return Ok(user);
+                return Ok (user);
+            }
+            catch (EntityExistException ex)
+            {
+                return new ContentResult 
+                {
+                    StatusCode = 409,
+                    Content = ex.Message
+                };
+            }
         }
     }
 }

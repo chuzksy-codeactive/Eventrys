@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eventrys.Src.Data;
 using Eventrys.Src.Domain.Entities;
+using Eventrys.Src.Domain.Exceptions;
 using Eventrys.Src.Model;
 using Eventrys.Src.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,11 @@ namespace Eventrys.Src.Services.Logic
         public async Task<User> Create (User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword (user.Password);
+
+            var existingUser = await _context.Users.FirstOrDefaultAsync (x => x.Username == user.Username || x.Email == user.Email);
+
+            if (existingUser != null)
+                throw new EntityExistException (nameof (existingUser), existingUser.Id);
 
             _context.Users.Add (user);
             await _context.SaveChangesAsync ();
